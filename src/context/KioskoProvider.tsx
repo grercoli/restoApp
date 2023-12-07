@@ -138,9 +138,27 @@ export const KioskoProvider = ({ children }: Children) => {
     setPedido(pedidoActualizado)
   }
 
-  const colocarOrden = (e: React.FormEvent<HTMLFormElement>) => {
+  const colocarOrden = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    await axios.post("/api/ordenes", {
+      pedido,
+      nombre,
+      total,
+      fecha: Date.now().toString()
+    })
+
+    // resetear la app
+    setCategoriaActual(categorias[0])
+    setPedido([])
+    setNombre("")
+    setTotal(0)
+
+    toast.success("Pedido Realizado Correctamente")
+
+    setTimeout(() => {
+      router.push("/")
+    }, 3000)
   }
 
   return (
